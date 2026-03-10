@@ -10,12 +10,11 @@ interface PipelineStage {
   count: number
 }
 
+// need api call for stable and candidate counts
 const stages: PipelineStage[] = [
-  { id: "draft", label: "Draft", status: "complete", count: 3 },
-  { id: "testing", label: "Testing", status: "active", count: 4 },
-  { id: "review", label: "Review", status: "warning", count: 2 },
-  { id: "staging", label: "Staging", status: "pending", count: 0 },
-  { id: "prod", label: "Production", status: "complete", count: 8 },
+  { id: "stable", label: "Stable", status: "active", count: 3 },
+  { id: "testing", label: "Candidate Testing", status: "active", count: 4 },
+  { id: "prod", label: "Production", status: "complete", count: 7 },
 ]
 
 const statusConfig = {
@@ -31,7 +30,6 @@ export function SafetyPipeline() {
     <div className="rounded-md border border-slate-200 bg-white">
       <div className="flex items-center gap-2 border-b border-slate-100 px-4 py-2.5">
         <span className="text-sm font-semibold text-slate-800">Safety Pipeline</span>
-        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">17 prompts</span>
       </div>
       <div className="flex items-stretch">
         {stages.map((stage, index) => {

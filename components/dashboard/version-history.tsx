@@ -4,39 +4,38 @@ import type { Prompt } from "./prompt-registry"
 
 interface Version {
   version: string
-  status: "candidate" | "stable" | "rolled-back"
+  status: "candidate" | "stable" | "archived"
   date: string
-  author: string
 }
 
 const versionHistory: Record<string, Version[]> = {
   support_bot: [
-    { version: "v1.5", status: "candidate", date: "Mar 1", author: "jdoe" },
-    { version: "v1.4", status: "stable", date: "Feb 26", author: "asmith" },
-    { version: "v1.3", status: "rolled-back", date: "Feb 20", author: "jdoe" },
+    { version: "v1.5", status: "candidate", date: "Mar 1"},
+    { version: "v1.4", status: "stable", date: "Feb 26"},
+    { version: "v1.3", status: "archived", date: "Feb 20"},
   ],
   summarizer: [
-    { version: "v2.1", status: "stable", date: "Feb 28", author: "mchen" },
-    { version: "v2.0", status: "rolled-back", date: "Feb 15", author: "mchen" },
+    { version: "v2.1", status: "stable", date: "Feb 28" },
+    { version: "v2.0", status: "archived", date: "Feb 15" },
   ],
   faq_assistant: [
-    { version: "v3.1", status: "candidate", date: "Mar 2", author: "asmith" },
-    { version: "v3.0", status: "stable", date: "Feb 22", author: "jdoe" },
+    { version: "v3.1", status: "candidate", date: "Mar 2" },
+    { version: "v3.0", status: "stable", date: "Feb 22" },
   ],
   code_reviewer: [
-    { version: "v1.3", status: "candidate", date: "Mar 3", author: "mchen" },
-    { version: "v1.2", status: "stable", date: "Feb 25", author: "asmith" },
+    { version: "v1.3", status: "candidate", date: "Mar 3" },
+    { version: "v1.2", status: "stable", date: "Feb 25" },
   ],
   email_drafter: [
-    { version: "v2.0", status: "stable", date: "Feb 20", author: "jdoe" },
-    { version: "v1.9", status: "rolled-back", date: "Feb 12", author: "jdoe" },
+    { version: "v2.0", status: "stable", date: "Feb 20" },
+    { version: "v1.9", status: "archived", date: "Feb 12" },
   ],
 }
 
 const statusConfig = {
   candidate: { label: "Candidate", icon: Clock, className: "bg-amber-50 text-amber-700 border-amber-200", iconClass: "text-amber-500" },
   stable: { label: "Stable", icon: CheckCircle2, className: "bg-emerald-50 text-emerald-700 border-emerald-200", iconClass: "text-emerald-500" },
-  "rolled-back": { label: "Rolled back", icon: RotateCcw, className: "bg-slate-50 text-slate-500 border-slate-200", iconClass: "text-slate-400" },
+  "archived": { label: "Rolled back", icon: RotateCcw, className: "bg-slate-50 text-slate-500 border-slate-200", iconClass: "text-slate-400" },
 }
 
 interface VersionHistoryProps {
@@ -87,7 +86,6 @@ export function VersionHistory({ prompt }: VersionHistoryProps) {
                       {status.label}
                     </span>
                   </div>
-                  <span className="text-xs text-slate-500">by {version.author}</span>
                 </div>
               </div>
               <span className="text-xs font-medium text-slate-500">{version.date}</span>

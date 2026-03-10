@@ -5,7 +5,7 @@ import { SafetyPipeline } from "@/components/dashboard/safety-pipeline"
 import { MetricsCards } from "@/components/dashboard/metrics-cards"
 import { PromptRegistry, type Prompt } from "@/components/dashboard/prompt-registry"
 import { VersionHistory } from "@/components/dashboard/version-history"
-import { DiffViewer } from "@/components/dashboard/diff-viewer"
+// import { DiffViewer } from "@/components/dashboard/diff-viewer"
 
 export default function DashboardPage() {
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null)
@@ -21,7 +21,6 @@ export default function DashboardPage() {
       <section>
         <div className="mb-3 flex items-baseline justify-between">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Overview</h3>
-          <span className="text-xs text-slate-400">Last 24 hours</span>
         </div>
         <MetricsCards />
       </section>
@@ -44,7 +43,7 @@ export default function DashboardPage() {
           </div>
           <div className="grid gap-4 lg:grid-cols-2">
             <VersionHistory prompt={selectedPrompt} />
-            <DiffViewer prompt={selectedPrompt} />
+            {/* <DiffViewer prompt={selectedPrompt} /> */}
           </div>
         </section>
       )}

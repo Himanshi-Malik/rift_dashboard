@@ -13,13 +13,12 @@ interface Metric {
   highlight?: boolean
 }
 
+// need api call for metrics
 const metrics: Metric[] = [
-  { label: "Total Prompts", value: 12, change: { value: 8, direction: "up" }, status: "default", highlight: true },
+  { label: "Total Prompts Versions", value: 12, status: "default", highlight: true },
   { label: "Stable", value: 8, progress: { current: 8, total: 12 }, status: "success" },
   { label: "Testing", value: 4, progress: { current: 4, total: 12 }, status: "warning" },
-  { label: "Blocked", value: 2, change: { value: 5, direction: "down" }, status: "error" },
-  { label: "Avg Risk Score", value: 34, suffix: "%", change: { value: 12, direction: "up" }, status: "warning" },
-  { label: "Pass Rate", value: 87, suffix: "%", change: { value: 3, direction: "up" }, status: "success" },
+  { label: "Archived", value: 2, status: "error" },
 ]
 
 const statusColors = {

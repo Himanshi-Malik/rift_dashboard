@@ -61,8 +61,6 @@ export function PromptRegistry({ selectedPrompt, onSelectPrompt }: PromptRegistr
             <th className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Stable</th>
             <th className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Candidate</th>
             <th className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
-            <th className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Risk Delta</th>
-            <th className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Updated</th>
           </tr>
         </thead>
         <tbody className="text-sm">
@@ -99,14 +97,6 @@ export function PromptRegistry({ selectedPrompt, onSelectPrompt }: PromptRegistr
                     {status.label}
                   </span>
                 </td>
-                <td className="px-4 py-3">
-                  {prompt.riskDelta !== undefined ? (
-                    <RiskIndicator delta={prompt.riskDelta} />
-                  ) : (
-                    <span className="text-xs text-slate-400">No change</span>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-slate-500">{prompt.lastUpdated}</td>
               </tr>
             )
           })}
