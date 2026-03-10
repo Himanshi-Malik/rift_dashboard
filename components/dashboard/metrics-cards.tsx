@@ -15,6 +15,7 @@ interface Metric {
 
 // need api call for metrics
 const metrics: Metric[] = [
+  //keep variable names here for values..
   { label: "Total Prompts Versions", value: 12, status: "default", highlight: true },
   { label: "Stable", value: 8, progress: { current: 8, total: 12 }, status: "success" },
   { label: "Testing", value: 4, progress: { current: 4, total: 12 }, status: "warning" },

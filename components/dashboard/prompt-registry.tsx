@@ -12,7 +12,7 @@ export interface Prompt {
   lastUpdated: string
   riskDelta?: number
 }
-
+//need to do api call here to get prompts for the user and set in local storage and then use that data to display in the table.
 const prompts: Prompt[] = [
   { id: "1", name: "support_bot", stableVersion: "v1.4", candidateVersion: "v1.5", status: "testing", lastUpdated: "2h ago", riskDelta: 53 },
   { id: "2", name: "summarizer", stableVersion: "v2.1", candidateVersion: null, status: "stable", lastUpdated: "3d ago" },

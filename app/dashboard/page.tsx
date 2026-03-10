@@ -5,11 +5,21 @@ import { SafetyPipeline } from "@/components/dashboard/safety-pipeline"
 import { MetricsCards } from "@/components/dashboard/metrics-cards"
 import { PromptRegistry, type Prompt } from "@/components/dashboard/prompt-registry"
 import { VersionHistory } from "@/components/dashboard/version-history"
+import { Key } from "lucide-react"
+import { error } from "console"
 // import { DiffViewer } from "@/components/dashboard/diff-viewer"
+async function getPromptsforUser(){
+  const user=JSON.parse(localStorage.getItem("loggedInUser") || "[]");
+  if(!user) console.log(error); 
 
+  const response =await fetch(`http://127.0.0.1:8000/users/${user.name}/prompts`)
+  const prompts=response.json();
+
+  localStorage.setItem("UserPrompts",JSON.stringify(prompts))
+
+}
 export default function DashboardPage() {
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null)
-
   return (
     <div className="space-y-6">
       {/* Pipeline Section */}

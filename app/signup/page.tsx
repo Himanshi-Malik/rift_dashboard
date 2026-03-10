@@ -52,13 +52,6 @@ export default function SignupPage() {
 
     // check if name already exists
     const existingName = users.find((u: any) => u.name === name)
-
-    if (existingName) {
-      setError("Username already taken. Please choose another.")
-      setIsLoading(false)
-      return
-    }
-
     // create new user
     const newUser = {
       name,
