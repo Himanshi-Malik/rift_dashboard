@@ -5,7 +5,6 @@ import { SafetyPipeline } from "@/components/dashboard/safety-pipeline"
 import { MetricsCards } from "@/components/dashboard/metrics-cards"
 import { PromptRegistry, type Prompt } from "@/components/dashboard/prompt-registry"
 import { VersionHistory } from "@/components/dashboard/version-history"
-import { DiffViewer } from "@/components/dashboard/diff-viewer"
 import { Activity, LayoutGrid, BookOpen, GitBranch } from "lucide-react"
 
 export default function DashboardPage() {
@@ -47,20 +46,17 @@ export default function DashboardPage() {
         <PromptRegistry selectedPrompt={selectedPrompt} onSelectPrompt={setSelectedPrompt} />
       </section>
 
-      {/* ── Detail Section ── */}
+      {/* ── Version History (shown on row click) ── */}
       {selectedPrompt && (
         <section>
           <SectionLabel
             icon={<GitBranch className="h-3.5 w-3.5" />}
-            label="Details"
+            label="Version History"
             suffix={
               <span className="ml-2 font-mono text-slate-600">{selectedPrompt.name}</span>
             }
           />
-          <div className="grid gap-4 lg:grid-cols-2">
-            <VersionHistory prompt={selectedPrompt} />
-            <DiffViewer prompt={selectedPrompt} />
-          </div>
+          <VersionHistory prompt={selectedPrompt} />
         </section>
       )}
     </div>
@@ -70,9 +66,7 @@ export default function DashboardPage() {
 // ── Section Label ──────────────────────────────────────────────────────────────
 
 function SectionLabel({
-  icon,
-  label,
-  suffix,
+  icon, label, suffix,
 }: {
   icon: React.ReactNode
   label: string

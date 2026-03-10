@@ -1,50 +1,79 @@
-// hooks/useDashboardData.ts
-import { useState, useEffect } from "react";
-import { fetchUserPrompts, fetchPromptDetails } from "../lib/api";
+// src/hooks/useDashboardData.ts
+
+import { useState, useEffect } from "react"
+import { fetchUserPrompts, fetchPromptDetails } from "../lib/api"
+
+export type DashboardRow = {
+  id: string
+  name: string
+  stable_version: string
+  candidate_version: string
+  status: "Stable" | "Testing" | "Failed"
+  risk_delta: string
+  risk_score: number
+}
 
 export function useDashboardData(username: string) {
-    const [dashboardData, setDashboardData] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+  const [dashboardData, setDashboardData] = useState<DashboardRow[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        async function loadData() {
-            try {
-                // 1. Get all base prompts for the user
-                const prompts = await fetchUserPrompts(username);
-                
-                // 2. Fetch the deep details (versions & regressions) for every prompt
-                const detailedPromises = prompts.map((p: any) => fetchPromptDetails(p.id));
-                const detailedResults = await Promise.all(detailedPromises);
+  useEffect(() => {
+    if (!username) return
 
-                // 3. Format the data perfectly for your Prompt Registry table
-                const formattedTableData = detailedResults.map((detail: any) => {
-                    const prompt = detail.prompt;
-                    const versions = detail.versions || [];
-                    const regressions = detail.regressions || [];
+    async function loadData() {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const prompts = await fetchUserPrompts(username)
 
-                    // Grab the latest regression test to show on the dashboard
-                    const latestRegression = regressions.length > 0 ? regressions[regressions.length - 1] : null;
+        const detailedResults = await Promise.all(
+          prompts.map((p) => fetchPromptDetails(p.id))
+        )
 
-                    return {
-                        id: prompt.id,
-                        name: prompt.name,
-                        stable_version: versions.length > 0 ? versions[0].version_no : "v1.0",
-                        candidate_version: versions.length > 1 ? versions[versions.length - 1].version_no : "-",
-                        status: latestRegression ? (latestRegression.risk_score > 0.5 ? "Failed" : "Testing") : "Stable",
-                        risk_delta: latestRegression ? `+${(latestRegression.risk_score * 100).toFixed(0)}%` : "No change",
-                    };
-                });
+        const rows: DashboardRow[] = detailedResults.map((detail) => {
+          const prompt      = detail.prompt as any   // has stable_version_id, candidate_version_id
+          const versions    = detail.versions ?? []
+          const regressions = detail.regressions ?? []
 
-                setDashboardData(formattedTableData);
-            } catch (error) {
-                console.error("Error loading dashboard:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
+          const stableVersion    = versions.find((v: any) => v.id === prompt.stable_version_id)
+          const candidateVersion = versions.find((v: any) => v.id === prompt.candidate_version_id)
 
-        loadData();
-    }, [username]);
+          const latestRegression = regressions.length > 0
+            ? regressions[regressions.length - 1]
+            : null
 
-    return { dashboardData, isLoading };
+          // ✅ Testing only if candidate actually exists
+          let status: DashboardRow["status"] = "Stable"
+          if (candidateVersion) {
+            if (latestRegression && latestRegression.risk_score > 0.6) status = "Failed"
+            else status = "Testing"
+          }
+
+          return {
+            id:                prompt.id,
+            name:              prompt.name,
+            stable_version:    stableVersion?.version_no    ?? "v1.0",
+            candidate_version: candidateVersion?.version_no ?? "-",
+            status,
+            risk_delta: latestRegression
+              ? `+${(latestRegression.risk_score * 100).toFixed(0)}%`
+              : "No change",
+            risk_score: latestRegression?.risk_score ?? 0,
+          }
+        })
+
+        setDashboardData(rows)
+      } catch (err) {
+        console.error("Error loading dashboard:", err)
+        setError("Could not load prompts. Is the backend running?")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadData()
+  }, [username])
+
+  return { dashboardData, isLoading, error }
 }
