@@ -42,16 +42,14 @@ export default function SignupPage() {
     const users = JSON.parse(localStorage.getItem("users") || "[]")
 
     // check if email already exists
-    const existingEmail = users.find((u: any) => u.email === email)
+    const existingUser = users.find((u: any) => u.email === email)
 
-    if (existingEmail) {
-      setError("Email already registered. Please login.")
+    if (existingUser) {
+      setError("Account already exists. Please login.")
       setIsLoading(false)
       return
     }
 
-    // check if name already exists
-    const existingName = users.find((u: any) => u.name === name)
     // create new user
     const newUser = {
       name,
